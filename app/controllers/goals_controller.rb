@@ -4,7 +4,7 @@ class GoalsController < ApplicationController
   before_action :goal_owner?, only: [:edit, :update, :destroy]
 
   def index
-    @user = User.find(params[:id])
+    @user = User.find(params[:user_id])
     if @user = current_user
       @goals = @user.goals
     else
@@ -25,6 +25,18 @@ class GoalsController < ApplicationController
     else
       flash.now[:errors] = @goal.errors.full_messages
       render :new
+    end
+  end
+
+  def show
+    @goal = Goal.find(params[:id])
+    if @goal.user == current_user
+      render :show
+    elsif @goal.private == false
+      render :show
+    else
+      flash[:errors] = "Private Goal"
+      redirect_to user_url(current_user)
     end
   end
 

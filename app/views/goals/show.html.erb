@@ -1,0 +1,10 @@
+<h1><%= @goal.user.username %>'s goal.</h1>
+<p>
+  <%= @goal.name %>
+</p>
+<p>
+  <%= @goal.description %>
+</p>
+
+<a href=" <%= user_goals_url(@goal.user) %>">
+Back to <%= @goal.user.username %>'s goals</a>
