@@ -85,21 +85,21 @@ RSpec.configure do |config|
 end
 
 def sign_up_lily
-  visit "users/new"
+  visit new_user_url
   fill_in "Username", with: "Lily"
   fill_in "Password", with: "Riopelle"
   click_button "Sign Up"
 end
 
 def sign_up_jimmy
-  visit "users/new"
+  visit new_user_url
   fill_in "Username", with: "Jimmy"
   fill_in "Password", with: "PasswordFace"
   click_button "Sign Up"
 end
 
 def create_public_goal
-  visit "goals/new"
+  visit new_goal_url
   fill_in "Name", with: "Be friendlier"
   fill_in "Description", with: "Give less strikes and stop
                                 cursing so much and flipping people off"
@@ -108,9 +108,28 @@ def create_public_goal
 end
 
 def create_private_goal
-  visit "goals/new"
+  visit new_goal_url
   fill_in "Name", with: "Get a cat"
   fill_in "Description", with: "a friendly one"
   choose "Private"
+  click_button "Create Goal"
+end
+
+def create_posts
+  sign_up_lily
+  create_public_goal
+  create_private_goal
+end
+
+def login_jimmy
+  click_button "Log Out"
+  sign_up_jimmy
+end
+
+def create_jimmy_goal
+  visit new_goal_url
+  fill_in "Name", with: "Go by James"
+  fill_in "Description", with: "JIMMY!!!"
+  choose "Public"
   click_button "Create Goal"
 end

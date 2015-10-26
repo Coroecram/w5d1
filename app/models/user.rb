@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     self.session_token
   end
 
+  def public_goals
+    self.goals.select{ |goal| goal.private == false }
+  end
+
   private
   def ensure_session_token
     self.session_token ||= SecureRandom::urlsafe_base64

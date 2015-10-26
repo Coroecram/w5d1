@@ -5,7 +5,7 @@ class GoalsController < ApplicationController
 
   def index
     @user = User.find(params[:user_id])
-    if @user = current_user
+    if @user == current_user
       @goals = @user.goals
     else
       @goals = @user.public_goals
@@ -47,7 +47,7 @@ class GoalsController < ApplicationController
   def update
     @goal = Goal.find(params[:id])
 
-    if @goal.update(goals_params)
+    if @goal.update(goal_params)
       redirect_to goal_url(@goal)
     else
       flash.now[:errors] = @goal.errors.full_messages
@@ -63,7 +63,7 @@ class GoalsController < ApplicationController
 
   private
   def goal_params
-    params.require(:goal).permit(:name, :description, :private)
+    params.require(:goal).permit(:name, :description, :private, :completed)
   end
 
   def goal_owner?

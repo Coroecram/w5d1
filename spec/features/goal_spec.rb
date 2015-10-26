@@ -50,9 +50,7 @@ end
 
 feature "displaying user goal index" do
   before :each do
-    sign_up_lily
-    create_public_goal
-    create_private_goal
+    create_posts
   end
 
   scenario "home button redirects to user/:id/goals" do
@@ -61,7 +59,7 @@ feature "displaying user goal index" do
   end
 
   scenario "user#show redirects to user user/goals#index" do
-    visit "users/1"
+    visit user_url(1)
     expect(page).to have_content("Get a cat")
   end
 
@@ -71,10 +69,20 @@ feature "displaying user goal index" do
     expect(page).to have_content("Get a cat")
   end
 
+  scenario "display new link button if current user" do
+    click_link "Home"
+    expect(page).to have_content("New Goal")
+  end
+
+  scenario "does not display new link button if not user's page" do
+    login_jimmy
+    visit user_url(1)
+    expect(page).not_to have_content("New Goal")
+  end
+
   scenario "only display public goals of another user" do
-    click_button "Log Out"
-    sign_up_jimmy
-    visit "users/1"
+    login_jimmy
+    visit user_url(1)
     expect(page).to have_content("Be friendlier")
     expect(page).not_to have_content("Get a cat")
   end
@@ -92,12 +100,101 @@ feature "displaying user goal index" do
 end
 
 feature "displaying single goal" do
+  before :each do
+    create_posts
+  end
+  scenario "cannot view individual show of another user's private goal" do
+    login_jimmy
+    visit goal_url(2)
+    expect(page).not_to have_content("Get a cat")
+  end
 
-  scenario "cannot view individual show of another user's private goal"
+  scenario "can view individual show of another user's public goal" do
+    login_jimmy
+    visit goal_url(1)
+    expect(page).to have_content("Be friendlier")
+  end
 
-  scenario "can view individual show of another user's public goal"
+  scenario "has edit button if logged in as goal owner" do
+    visit goal_url(1)
+    expect(page).to have_content "Edit"
+  end
 
-  scenario "has edit button if logged in as goal owner"
+  scenario "has delete button if logged in as goal owner" do
+    visit goal_url(1)
+    expect(page).to have_content "Delete"
+  end
 
-  scenario "has edit button if logged in as goal owner"
+  scenario "has no edit button if not logged in as owner" do
+    login_jimmy
+    visit goal_url(1)
+    expect(page).not_to have_content "Edit"
+  end
+
+  scenario "has no delete button if not logged in as owner" do
+    login_jimmy
+    visit goal_url(1)
+    expect(page).not_to have_content "Delete"
+  end
+end
+
+
+feature "delete a goal" do
+  before :each do
+    create_posts
+  end
+
+  scenario "has delete button on show page if logged in as goal owner" do
+    visit goal_url(1)
+    expect(page).to have_content("Be friendlier")
+    click_button "Delete"
+    expect(page).to have_content("Get a cat")
+    expect(page).not_to have_content("Be friendlier")
+  end
+
+  scenario "has delete button on goals index if logged in as goal owner" do
+    login_jimmy
+    create_jimmy_goal
+    visit user_url(2)
+    expect(page).to have_content("Go by James")
+    click_button "Delete"
+    expect(page).not_to have_content("Go by James")
+  end
+end
+
+feature "edit a goal" do
+  before :each do
+    create_posts
+  end
+
+  scenario "has edit button on show page if logged in as goal owner" do
+    visit goal_url(1)
+    expect(page).to have_content("Be friendlier")
+    click_link "Edit"
+    fill_in "Name", with: "Get a dog"
+    fill_in "Description", with: "a small one"
+    choose "Public"
+    click_button "Edit Goal"
+    expect(page).to have_content("Get a dog")
+  end
+
+  scenario "has edit button on goals index if logged in as goal owner" do
+    login_jimmy
+    create_jimmy_goal
+    visit user_url(2)
+    expect(page).to have_content("Go by James")
+    click_link "Edit"
+    fill_in "Name", with: "Get a dog"
+    fill_in "Description", with: "a small one"
+    choose "Public"
+    click_button "Edit Goal"
+    expect(page).to have_content("Get a dog")
+  end
+
+  scenario "cannot edit or delete another user's goals" do
+    login_jimmy
+    visit edit_goal_url(1)
+    expect(page).not_to have_content("Be friendlier")
+  end
+
 end

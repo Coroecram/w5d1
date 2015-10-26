@@ -1,0 +1,21 @@
+<h1><%= @user.username %>'s goals.</h1>
+
+<% @goals.each do |goal| %>
+<p>
+  <%= goal.name %>
+  <%= goal.description %>
+  <%= goal.completed ? "Completed" : "Not Completed" %>
+</p>
+<p>
+  <a href="<%= edit_goal_url(goal) %>">Edit</a>
+  <form action="<%= goal_url(goal) %>" method="POST">
+    <%= auth_token %>
+    <input type="hidden" name="_method" value="DELETE">
+    <button value="submit">Delete</button>
+  </form>
+</p>
+<% end %>
+
+<% if @user == current_user %>
+  <a href="<%= new_goal_url %>">New Goal</a>
+<% end %>

@@ -1,11 +1,17 @@
 class UsersController < ApplicationController
 
+  before_action :require_signed_in, only: [:show, :index]
+
   def index
     @users = User.all
   end
 
   def new
     @user = User.new
+  end
+
+  def show
+    redirect_to user_goals_url(params[:id])
   end
 
   def create

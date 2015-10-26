@@ -17,10 +17,13 @@
       <input type="hidden" name="_method" value="DELETE">
       <button value="submit">Log Out</button>
   </form>
+  <a href="<%= user_url(current_user)%>">Home</a>
 <% else %>
     <a href="<%= new_session_url %>"> Sign In</a> |
-    <a href="<%= new_user_url %>"> Sign Up</a> 
+    <a href="<%= new_user_url %>"> Sign Up</a>
 <% end %>
+<hr>
+
 <%= yield %>
 </body>
 </html>
