@@ -90,3 +90,27 @@ def sign_up_lily
   fill_in "Password", with: "Riopelle"
   click_button "Sign Up"
 end
+
+def sign_up_jimmy
+  visit "users/new"
+  fill_in "Username", with: "Jimmy"
+  fill_in "Password", with: "PasswordFace"
+  click_button "Sign Up"
+end
+
+def create_public_goal
+  visit "goals/new"
+  fill_in "Name", with: "Be friendlier"
+  fill_in "Description", with: "Give less strikes and stop
+                                cursing so much and flipping people off"
+  choose "Public"
+  click_button "Create Goal"
+end
+
+def create_private_goal
+  visit "goals/new"
+  fill_in "Name", with: "Get a cat"
+  fill_in "Description", with: "a friendly one"
+  choose "Private"
+  click_button "Create Goal"
+end
