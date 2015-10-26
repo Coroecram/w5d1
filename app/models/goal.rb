@@ -7,4 +7,6 @@ class Goal < ActiveRecord::Base
     foreign_key: :user_id,
     primary_key: :id
 
+  has_many :comments, as: :commentable
+
 end

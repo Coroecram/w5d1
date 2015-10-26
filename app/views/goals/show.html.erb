@@ -14,5 +14,13 @@
   </form>
 </p>
 <% end %>
+
+<% @goal.comments.each do |comment| %>
+  <p><%= comment.comment %> by: <%= comment.user.username %></p>
+<% end %>
+
+<%= render 'comments/new', id: @goal.id, type: "Goal" %>
+
+
 <a href=" <%= user_goals_url(@goal.user) %>">
 Back to <%= @goal.user.username %>'s goals</a>
